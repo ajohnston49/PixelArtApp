@@ -1,9 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>About Pixel Art Maker</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .about ul {
+      padding-left: 20px;
+    }
+
+    .tutorial-step {
+      margin-bottom: 12px;
+    }
+
+    .highlight {
+      color: #00ffc3;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div id="layout">
@@ -19,15 +34,20 @@
 
     <main>
       <header>
-        <h1>🧱 Pixel Art Maker</h1>
-        <p class="subheading">Modular. Expandable. Retro-cool.</p>
+        <h1>🧱 Pixel Art Maker v1.3</h1>
+        <p class="subheading">Modular. Expandable. Retro-cool. Smarter than ever.</p>
       </header>
 
       <section class="about">
-        <h2>⚡ Why It Exists</h2>
-        <p>
-          Pixel Art Maker v1.2 is a fast, focused creative tool engineered by Alex Johnston to deliver clean UX, effortless controls, and a professional-grade feel. Whether you're sketching characters, building tilesets, or just vibing with pixels, this app lets you work at any resolution with a UI that doesn’t fight back.
-        </p>
+        <h2>🚀 What’s New in v1.3</h2>
+        <ul>
+          <li>🖼 <span class="highlight">Smart PNG Saving:</span> grid exports now respect all resolutions — from 16×16 up to 128×128 — pixel-perfect output, every time</li>
+          <li>🧼 <span class="highlight">Fill Transparent:</span> instantly wipe the canvas to transparent for fresh frame creation or animation prep</li>
+          <li>📸 <span class="highlight">Scene Save/Load:</span> stash canvas states locally and reload them with previews, resolution-aware</li>
+          <li>🎨 <span class="highlight">Color Palette Sidebar:</span> save up to 10 custom swatches, ready to click and reuse whenever inspiration strikes</li>
+          <li>🔒 <span class="highlight">Local Persistence:</span> your scenes and palette now auto-save in your browser — no login, no cloud, just yours</li>
+          <li>💸 <span class="highlight">Completely Free:</span> every tool, feature, and enhancement comes at zero cost</li>
+        </ul>
 
         <h2>🧠 Under the Hood</h2>
         <ul>
@@ -35,20 +55,38 @@
           <li>Paint and erase modes powered by direct CSS background swap</li>
           <li>Drag toggle for fluid mouse painting</li>
           <li>PNG export via canvas layering</li>
-          <li>Fully modular architecture prepped for palette saving, shape tools, and layering</li>
+          <li>LocalStorage-powered persistence for both canvas and palette</li>
+          <li>Modular architecture prepped for shape tools and layering</li>
         </ul>
+
+        <h2>📚 Getting Started</h2>
+        <div class="tutorial-step">
+          <span class="highlight">1.</span> Select your desired resolution from the dropdown — higher values give more pixel space
+        </div>
+        <div class="tutorial-step">
+          <span class="highlight">2.</span> Use the color picker and paint mode to begin drawing. Drag toggle makes rapid sketching easier.
+        </div>
+        <div class="tutorial-step">
+          <span class="highlight">3.</span> Click <strong>💾 Save Frame</strong> to capture a snapshot of your art for later recall.
+        </div>
+        <div class="tutorial-step">
+          <span class="highlight">4.</span> Click any empty palette box in the sidebar to save your current color. Filled boxes reload that color instantly.
+        </div>
+        <div class="tutorial-step">
+          <span class="highlight">5.</span> When ready, press <strong>💾 Save PNG</strong> to download your art.
+        </div>
 
         <h2>🎨 Built to Showcase</h2>
         <p>
           This app isn’t just a sandbox—it’s a portfolio piece. It reflects a dev mindset focused on speed, clarity, modularity, and brand. Every tool, layout choice, and microinteraction was designed to demonstrate how solo tools can feel studio-made.
         </p>
 
-        <h2>🔧 Next Versions?</h2>
+        <h2>🔮 Future Vision</h2>
         <ul>
-          <li>Palette swatches with localStorage support</li>
           <li>Click-and-drag shape stamping (square, circle)</li>
           <li>Layer system for multi-depth designs</li>
           <li>Pixel preview scaling (4x, 8x, etc.)</li>
+          <li>Timeline animation workflow for frame-by-frame pixel motion</li>
         </ul>
 
         <footer>
