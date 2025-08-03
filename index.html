@@ -4,6 +4,33 @@
   <meta charset="UTF-8" />
   <title>Pixel Art Maker v1.2 — Alex Johnston</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    #sceneLibrary {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin-top: 8px;
+    }
+    .scene-btn {
+      display: block;
+      margin-bottom: 5px;
+      width: calc(100% - 50px);
+    }
+    .scene-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    .delete-btn {
+      background-color: #e33;
+      color: #fff;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <div id="layout">
@@ -39,6 +66,11 @@
       </div>
 
       <div class="tool-section">
+        <label>🎨 Saved Scenes</label>
+        <div id="sceneLibrary"></div>
+      </div>
+
+      <div class="tool-section">
         <button onclick="location.href='about.html'" id="aboutBtn">📖 About This App</button>
       </div>
     </aside>
@@ -52,6 +84,8 @@
       <section id="controls">
         <input type="color" id="colorPicker" value="#ff0000" />
         <button id="saveBtn">💾 Save PNG</button>
+        <button id="clearTransparentBtn">🧼 Fill Transparent</button>
+        <button id="saveFrameBtn">📸 Save Frame</button>
       </section>
 
       <div id="grid"></div>
@@ -75,6 +109,9 @@
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const dragToggle = document.getElementById('dragToggle');
+    const clearTransparentBtn = document.getElementById('clearTransparentBtn');
+    const saveFrameBtn = document.getElementById('saveFrameBtn');
+    const sceneLibrary = document.getElementById('sceneLibrary');
 
     let cells = [];
     let currentColor = colorPicker.value;
@@ -83,11 +120,57 @@
     const canvasSize = 640;
     let isMouseDown = false;
     let dragEnabled = dragToggle.checked;
+    let savedScenes = [];
 
-    dragToggle.addEventListener('change', (e) => {
-      dragEnabled = e.target.checked;
-    });
+    function saveToStorage() {
+      localStorage.setItem('pixelArtScenes', JSON.stringify(savedScenes));
+    }
 
+    function loadFromStorage() {
+      const data = localStorage.getItem('pixelArtScenes');
+      if (!data) return;
+      savedScenes = JSON.parse(data);
+
+      savedScenes.forEach((scene, index) => {
+        if (!scene) return;
+        createSceneEntry(scene, index);
+      });
+    }
+
+    function createSceneEntry(scene, index) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'scene-wrapper';
+
+      const btn = document.createElement('button');
+      btn.textContent = `Scene ${index + 1} (${scene.resolution}×${scene.resolution})`;
+      btn.className = 'scene-btn';
+      btn.onclick = () => {
+        if (confirm('Load scene?')) {
+          resolution.value = scene.resolution;
+          createGrid(scene.resolution);
+          setTimeout(() => {
+            scene.state.forEach((color, i) => {
+              if (cells[i]) cells[i].style.background = color;
+            });
+          }, 10);
+        }
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '🗑';
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.onclick = () => {
+        savedScenes[index] = null;
+        saveToStorage();
+        sceneLibrary.removeChild(wrapper);
+      };
+
+      wrapper.appendChild(btn);
+      wrapper.appendChild(deleteBtn);
+      sceneLibrary.appendChild(wrapper);
+    }
+
+    dragToggle.addEventListener('change', e => dragEnabled = e.target.checked);
     document.body.addEventListener('mousedown', () => isMouseDown = true);
     document.body.addEventListener('mouseup', () => isMouseDown = false);
 
@@ -128,29 +211,42 @@
       cell.style.background = (paintMode === 'color') ? currentColor : 'rgba(0,0,0,0)';
     }
 
-    colorPicker.addEventListener('input', () => {
-      currentColor = colorPicker.value;
-    });
-
-    resolution.addEventListener('change', () => {
-      const newSize = parseInt(resolution.value);
-      createGrid(newSize);
-    });
-
+    colorPicker.addEventListener('input', () => currentColor = colorPicker.value);
+    resolution.addEventListener('change', () => createGrid(parseInt(resolution.value)));
     document.querySelectorAll('input[name="mode"]').forEach(radio => {
-      radio.addEventListener('change', () => {
-        paintMode = radio.value;
-      });
+      radio.addEventListener('change', () => paintMode = radio.value);
     });
+
+    clearTransparentBtn.onclick = () => {
+      cells.forEach(cell => cell.style.background = 'rgba(0,0,0,0)');
+    };
+
+    saveFrameBtn.onclick = () => {
+      const state = cells.map(cell => window.getComputedStyle(cell).backgroundColor);
+      const res = gridSize;
+      const sceneId = savedScenes.length;
+      const newScene = { state, resolution: res };
+      savedScenes.push(newScene);
+      saveToStorage();
+      createSceneEntry(newScene, sceneId);
+    };
 
     saveBtn.onclick = () => {
+      let cellSize;
+      if (gridSize === 16) cellSize = 40;
+      else if (gridSize === 32) cellSize = 20;
+      else if (gridSize === 64) cellSize = 10;
+      else if (gridSize === 128) cellSize = 5;
+      else cellSize = canvasSize / gridSize;
+
       cells.forEach((cell, i) => {
         const col = i % gridSize;
         const row = Math.floor(i / gridSize);
         const bg = window.getComputedStyle(cell).backgroundColor;
         ctx.fillStyle = bg.includes('rgba(0, 0, 0, 0)') ? 'rgba(0,0,0,0)' : bg;
-        ctx.fillRect(col * 10, row * 10, 10, 10);
+        ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
       });
+
       const link = document.createElement('a');
       link.download = `pixel_art_${gridSize}x${gridSize}.png`;
       link.href = canvas.toDataURL();
