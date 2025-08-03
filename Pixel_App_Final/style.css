@@ -1,0 +1,190 @@
+/* === RESET + BASE === */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0d0d0d;
+  color: #eee;
+  overflow: hidden;
+}
+
+h1, h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.subheading {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #999;
+  text-shadow: 0 0 2px #000;
+}
+
+/* === GRID LAYOUT === */
+#layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* === SIDEBAR === */
+#sidebar {
+  width: 220px;
+  padding: 25px 20px;
+  background: radial-gradient(circle at top left, #f9f9f9, #ddd);
+  color: #222;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+  border-right: 2px solid #00ffc3;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+#sidebar h2 {
+  font-size: 18px;
+  color: #00bfbf;
+  margin-bottom: 5px;
+}
+
+/* === TOOL GROUPING === */
+.tool-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.toggle input[type="radio"],
+.toggle input[type="checkbox"] {
+  transform: scale(1.2);
+}
+
+select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  background: #222;
+  color: #00ffc3;
+  box-shadow: 0 0 4px #00ffc3;
+}
+
+/* === MAIN PANEL === */
+main {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* === HEADER === */
+header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+h1 {
+  font-size: 26px;
+  color: #00ffc3;
+  text-shadow: 0 0 8px #00ffc3;
+}
+
+/* === CONTROLS === */
+#controls {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 25px;
+  background: #1a1a1a;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 6px #00ffc3;
+}
+
+input[type="color"] {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 4px #00ffc3;
+}
+
+button {
+  padding: 10px 18px;
+  background: #222;
+  color: #00ffc3;
+  border: 1px solid #00ffc3;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 3px #00ffc3;
+  box-shadow: 0 0 5px #00ffc3;
+}
+
+button:hover {
+  background: #00ffc3;
+  color: #111;
+}
+
+/* === GRID === */
+#grid {
+  display: grid;
+  margin-bottom: 30px;
+  box-shadow: 0 0 12px #00ffc3;
+  border-radius: 8px;
+  background: #333;
+  transition: grid-template-columns 0.2s ease, grid-template-rows 0.2s ease;
+}
+
+.cell {
+  background: white;
+  border: 1px solid #ccc;
+  transition: background 0.2s;
+}
+
+.cell:hover {
+  background: #00ffc3;
+  cursor: pointer;
+}
+
+/* === CANVAS (HIDDEN) === */
+canvas {
+  display: none;
+}
+
+/* === FOOTER === */
+footer {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #aaa;
+  text-align: center;
+  width: 100%;
+}
+
+.dev-info {
+  background: #111;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 6px #00ffc3;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dev-info a {
+  color: #00ffc3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.dev-info a:hover {
+  text-decoration: underline;
+}
