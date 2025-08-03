@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pixel Art Maker v1.2 — Alex Johnston</title>
+  <title>Pixel Art Maker v1.3 — Alex Johnston</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     #sceneLibrary {
@@ -28,6 +28,19 @@
       color: #fff;
       border: none;
       padding: 4px 8px;
+      cursor: pointer;
+    }
+    #paletteSidebar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      margin-top: 12px;
+    }
+    .palette-slot {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #aaa;
+      background-color: transparent;
       cursor: pointer;
     }
   </style>
@@ -71,6 +84,11 @@
       </div>
 
       <div class="tool-section">
+        <label>💾 Saved Colors</label>
+        <div id="paletteSidebar"></div>
+      </div>
+
+      <div class="tool-section">
         <button onclick="location.href='about.html'" id="aboutBtn">📖 About This App</button>
       </div>
     </aside>
@@ -93,7 +111,7 @@
 
       <footer>
         <div class="dev-info">
-          <strong>Version 1.2</strong> — Built by <strong>Alex Johnston</strong><br />
+          <strong>Version 1.3</strong> — Built by <strong>Alex Johnston</strong><br />
           <a href="https://github.com/ajohnston49" target="_blank">GitHub: ajohnston49</a><br />
           <span>Modular coder | Pixel engineer | Fast thinker</span>
         </div>
@@ -112,6 +130,7 @@
     const clearTransparentBtn = document.getElementById('clearTransparentBtn');
     const saveFrameBtn = document.getElementById('saveFrameBtn');
     const sceneLibrary = document.getElementById('sceneLibrary');
+    const paletteSidebar = document.getElementById('paletteSidebar');
 
     let cells = [];
     let currentColor = colorPicker.value;
@@ -121,20 +140,30 @@
     let isMouseDown = false;
     let dragEnabled = dragToggle.checked;
     let savedScenes = [];
+    let colorPalette = new Array(10).fill(null);
+    const paletteSlots = [];
 
     function saveToStorage() {
       localStorage.setItem('pixelArtScenes', JSON.stringify(savedScenes));
+      localStorage.setItem('pixelArtPalette', JSON.stringify(colorPalette));
     }
 
     function loadFromStorage() {
-      const data = localStorage.getItem('pixelArtScenes');
-      if (!data) return;
-      savedScenes = JSON.parse(data);
+      const sceneData = localStorage.getItem('pixelArtScenes');
+      if (sceneData) {
+        savedScenes = JSON.parse(sceneData);
+        savedScenes.forEach((scene, index) => {
+          if (scene) createSceneEntry(scene, index);
+        });
+      }
 
-      savedScenes.forEach((scene, index) => {
-        if (!scene) return;
-        createSceneEntry(scene, index);
-      });
+      const paletteData = localStorage.getItem('pixelArtPalette');
+      if (paletteData) {
+        colorPalette = JSON.parse(paletteData);
+        colorPalette.forEach((color, i) => {
+          if (color) paletteSlots[i].style.backgroundColor = color;
+        });
+      }
     }
 
     function createSceneEntry(scene, index) {
@@ -253,7 +282,30 @@
       link.click();
     };
 
+    // 🎨 Initialize Palette Slots
+    for (let i = 0; i < 10; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'palette-slot';
+      slot.addEventListener('click', () => {
+        const saved = colorPalette[i];
+        if (!saved) {
+          if (confirm('Save current color to this slot?')) {
+            colorPalette[i] = currentColor;
+            slot.style.backgroundColor = currentColor;
+            saveToStorage();
+          }
+        } else {
+          currentColor = saved;
+          colorPicker.value = saved;
+        }
+      });
+      paletteSidebar.appendChild(slot);
+      paletteSlots.push(slot);
+    }
+
     createGrid(gridSize);
+    loadFromStorage();
   </script>
 </body>
 </html>
+
